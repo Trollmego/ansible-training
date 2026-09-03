@@ -11,7 +11,9 @@
           - gmail_email | length > 0
           - gmail_app_password is defined
           - gmail_app_password | length > 0
-        fail_msg: "Enter your Gmail address and app password in the launch survey."
+          - recipient_email is defined
+          - recipient_email is regex('^[A-Za-z0-9._%+-]+@gmail\\.com$')
+        fail_msg: "Enter the sender Gmail address, app password, and a valid Gmail recipient."
       no_log: true
 
     - name: Send Hello through Gmail
@@ -23,14 +25,13 @@
         password: "{{ gmail_app_password }}"
         from: "{{ gmail_email }}"
         to:
-          - ahmedmedhatt38@gmail.com
+          - "{{ recipient_email }}"
         subject: Ahmed Medhat Test
         body: ana ahmed medhat yabny
       no_log: true
 
     - name: Confirm that Gmail accepted the message
       ansible.builtin.debug:
-        msg: "Gmail accepted the Hello email for delivery to ahmedmedhatt38@gmail.com."
-
+        msg: "Gmail accepted the Hello email for delivery to {{ recipient_email }}."
 
 
