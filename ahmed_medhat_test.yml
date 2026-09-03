@@ -4,30 +4,30 @@
   gather_facts: false
 
   tasks:
-    - name: Validate required Outlook inputs
+    - name: Validate required Gmail inputs
       ansible.builtin.assert:
         that:
-          - outlook_email is defined
-          - outlook_email | length > 0
-          - outlook_app_password is defined
-          - outlook_app_password | length > 0
-        fail_msg: "Enter your Outlook email and app password in the launch survey."
+          - gmail_email is defined
+          - gmail_email | length > 0
+          - gmail_app_password is defined
+          - gmail_app_password | length > 0
+        fail_msg: "Enter your Gmail address and app password in the launch survey."
       no_log: true
 
-    - name: Send Hello through Outlook
+    - name: Send Hello through Gmail
       community.general.mail:
-        host: smtp.office365.com
+        host: smtp.gmail.com
         port: 587
         secure: starttls
-        username: "{{ outlook_email }}"
-        password: "{{ outlook_app_password }}"
-        from: "{{ outlook_email }}"
+        username: "{{ gmail_email }}"
+        password: "{{ gmail_app_password }}"
+        from: "{{ gmail_email }}"
         to:
           - ahmedmedhatt38@gmail.com
         subject: Ahmed Medhat Test
         body: Hello
       no_log: true
 
-    - name: Confirm that Outlook accepted the message
+    - name: Confirm that Gmail accepted the message
       ansible.builtin.debug:
-        msg: "Outlook accepted the Hello email for delivery to ahmedmedhatt38@gmail.com."
+        msg: "Gmail accepted the Hello email for delivery to ahmedmedhatt38@gmail.com."
