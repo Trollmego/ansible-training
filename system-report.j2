@@ -1,0 +1,11 @@
+Ansible Linux Training Report
+=============================
+Student: {{ student_name }}
+Hostname: {{ ansible_facts.hostname }}
+Operating system: {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}
+Architecture: {{ ansible_facts.architecture }}
+Kernel: {{ ansible_facts.kernel }}
+Managed by: Ansible
+{% if ansible_facts.os_family == "RedHat" %}
+Platform family: Red Hat
+{% endif %}

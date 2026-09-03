@@ -1,0 +1,15 @@
+---
+- name: First Linux automation lab
+  hosts: lab
+  gather_facts: true
+
+  tasks:
+    - name: Show the Linux version
+      ansible.builtin.debug:
+        msg: "Managing {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}"
+
+    - name: Create a file with Ansible
+      ansible.builtin.copy:
+        dest: "{{ ansible_facts.user_dir }}/ansible-created-this.txt"
+        content: "This file was created automatically by Ansible.\n"
+        mode: "0644"

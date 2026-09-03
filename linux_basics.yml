@@ -1,0 +1,70 @@
+---
+- name: Learn Linux automation safely
+  hosts: lab
+  gather_facts: true
+
+  vars:
+    student_name: Ahmed
+    lab_root: "{{ ansible_facts.user_dir }}/ansible-training"
+    training_directories:
+      - configs
+      - reports
+      - backups
+
+  tasks:
+    - name: Explain the target system
+      ansible.builtin.debug:
+        msg: >-
+          {{ student_name }} is automating {{ ansible_facts.hostname }},
+          running {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}.
+      tags: [information]
+
+    - name: Create the training directory structure
+      ansible.builtin.file:
+        path: "{{ lab_root }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ training_directories }}"
+      tags: [files]
+
+    - name: Create an application configuration file
+      ansible.builtin.copy:
+        dest: "{{ lab_root }}/configs/training.conf"
+        content: |
+          student={{ student_name }}
+          managed_by=ansible
+          environment=training
+        mode: "0644"
+      notify: Configuration changed
+      tags: [files, config]
+
+    - name: Generate a system report from a Jinja template
+      ansible.builtin.template:
+        src: system-report.j2
+        dest: "{{ lab_root }}/reports/system-report.txt"
+        mode: "0644"
+      tags: [files, report]
+
+    - name: Create a Red Hat-specific note
+      ansible.builtin.copy:
+        dest: "{{ lab_root }}/reports/redhat-note.txt"
+        content: "This task ran because the operating system belongs to the Red Hat family.\n"
+        mode: "0644"
+      when: ansible_facts.os_family == "RedHat"
+      tags: [report]
+
+    - name: Check whether the configuration exists
+      ansible.builtin.stat:
+        path: "{{ lab_root }}/configs/training.conf"
+      register: training_config
+      tags: [verification]
+
+    - name: Confirm the final result
+      ansible.builtin.debug:
+        msg: "Training configuration exists: {{ training_config.stat.exists }}"
+      tags: [verification]
+
+  handlers:
+    - name: Configuration changed
+      ansible.builtin.debug:
+        msg: "A handler ran because training.conf changed."
