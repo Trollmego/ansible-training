@@ -1,10 +1,10 @@
 ---
-- name: Ahmed Medhat Test
+- name: Ahmed Medhat Email Test
   hosts: all
   gather_facts: false
 
   tasks:
-    - name: Validate required Gmail inputs
+    - name: Validate Gmail information
       ansible.builtin.assert:
         that:
           - gmail_email is defined
@@ -13,25 +13,64 @@
           - gmail_app_password | length > 0
           - recipient_email is defined
           - recipient_email is regex('^[A-Za-z0-9._%+-]+@gmail\\.com$')
-        fail_msg: "Enter the sender Gmail address, app password, and a valid Gmail recipient."
+        fail_msg: "Enter a Gmail sender, app password, and valid Gmail recipient."
       no_log: true
 
-    - name: Send Hello through Gmail
+    - name: Send Ahmed HTML table through Gmail
       community.general.mail:
         host: smtp.gmail.com
         port: 587
         secure: starttls
         username: "{{ gmail_email }}"
         password: "{{ gmail_app_password }}"
-        from: "{{ gmail_email }}"
+        from: "Ahmed Medhat <{{ gmail_email }}>"
         to:
           - "{{ recipient_email }}"
-        subject: Ahmed Medhat Test
-        body: ana ahmed medhat yabny
+        subject: "Ahmed Medhat - Ansible Automation Test"
+        subtype: html
+        body: |
+          <!DOCTYPE html>
+          <html>
+          <body style="margin: 0; padding: 32px; background: #f3f4f6; font-family: Arial, sans-serif;">
+            <div style="max-width: 700px; margin: auto; padding: 32px; background: #ffffff; border-radius: 12px;">
+              <h1 style="margin-top: 0; color: #cc0000;">Ahmed Medhat</h1>
+              <p style="color: #374151; font-size: 16px;">Hello from Ahmed's Ansible automation.</p>
+
+              <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                  <tr style="background: #cc0000; color: #ffffff;">
+                    <th style="padding: 14px; border: 1px solid #dddddd;">Ahmed Name</th>
+                    <th style="padding: 14px; border: 1px solid #dddddd;">Ahmed Task</th>
+                    <th style="padding: 14px; border: 1px solid #dddddd;">Ahmed Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: #fff7f7;">
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Medhat</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Linux Setup</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Completed</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Medhat</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Ansible Playbook</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Successful</td>
+                  </tr>
+                  <tr style="background: #fff7f7;">
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Medhat</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Email Automation</td>
+                    <td style="padding: 14px; border: 1px solid #dddddd;">Ahmed Delivered</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p style="margin-top: 24px; color: #6b7280;">
+                Automated by Ahmed Medhat using Red Hat Ansible Automation Platform.
+              </p>
+            </div>
+          </body>
+          </html>
       no_log: true
 
-    - name: Confirm that Gmail accepted the message
+    - name: Confirm Ahmed email delivery
       ansible.builtin.debug:
-        msg: "Gmail accepted the Hello email for delivery to {{ recipient_email }}."
-
-
+        msg: "Gmail accepted Ahmed's HTML email for delivery to {{ recipient_email }}."
