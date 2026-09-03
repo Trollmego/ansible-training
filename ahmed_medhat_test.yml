@@ -25,9 +25,12 @@
         to:
           - ahmedmedhatt38@gmail.com
         subject: Ahmed Medhat Test
-        body: Hello
+        body: ana ahmed medhat yabny
       no_log: true
 
     - name: Confirm that Gmail accepted the message
       ansible.builtin.debug:
         msg: "Gmail accepted the Hello email for delivery to ahmedmedhatt38@gmail.com."
+
+
+
