@@ -1,6 +1,6 @@
 ---
 - name: Beginner Ansible demonstration
-  hosts: lab
+  hosts: all
   gather_facts: true
 
   vars:
