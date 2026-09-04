@@ -1,0 +1,26 @@
+---
+- name: Run a web container with Podman
+  hosts: lab
+  gather_facts: false
+
+  tasks:
+    - name: Run the Nginx training container
+      containers.podman.podman_container:
+        name: ahmed-web
+        image: docker.io/library/nginx:latest
+        state: started
+        ports:
+          - "8080:80"
+
+    - name: Wait for the web server
+      ansible.builtin.uri:
+        url: http://127.0.0.1:8080
+        status_code: 200
+      register: nginx_response
+      retries: 10
+      delay: 2
+      until: nginx_response.status == 200
+
+    - name: Show the result
+      ansible.builtin.debug:
+        msg: "ahmed-web is running at http://localhost:8080"

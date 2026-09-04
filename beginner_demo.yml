@@ -1,0 +1,28 @@
+---
+- name: Beginner Ansible demonstration
+  hosts: lab
+  gather_facts: true
+
+  vars:
+    demo_directory: "{{ ansible_facts.user_dir }}/ansible-demo"
+
+  tasks:
+    - name: Create the demonstration directory
+      ansible.builtin.file:
+        path: "{{ demo_directory }}"
+        state: directory
+        mode: "0755"
+
+    - name: Create a system information file
+      ansible.builtin.copy:
+        dest: "{{ demo_directory }}/hello.txt"
+        mode: "0644"
+        content: |
+          Hello Ahmed!
+          This file was created by Ansible.
+          Host: {{ ansible_facts.hostname }}
+          OS: {{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}
+
+    - name: Display the final location
+      ansible.builtin.debug:
+        msg: "Created {{ demo_directory }}/hello.txt"
